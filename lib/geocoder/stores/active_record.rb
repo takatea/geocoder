@@ -210,8 +210,9 @@ module Geocoder::Store
         elsif columns == :geo_only
           clause = ""
         else
-          clause = (columns || full_column_name("*"))
+          clause = (full_column_names(columns) || full_column_name("*"))
         end
+
         if distance
           clause += ", " unless clause.empty?
           clause += "#{distance} AS #{distance_column}"
@@ -276,6 +277,17 @@ module Geocoder::Store
       def full_column_name(column)
         column = column.to_s
         column.include?(".") ? column : [table_name, column].join(".")
+      end
+
+      ##
+      # Prepend table name for all column
+      #
+      def full_column_names(columns)
+        return if columns.nil?
+
+        # TODO: we should accept column names with space (e.g. table_name.'column with space')
+        columns = columns.to_s.gsub(/[[:space:]]/, '').split(",") unless columns.class == Array
+        columns.map(&method(:full_column_name)).join(", ")
       end
     end
 
