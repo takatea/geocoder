@@ -736,9 +736,9 @@ A lot of debugging time can be saved by understanding how Geocoder works with Ac
 
 * using [`select` method (selects one or more columns)](https://api.rubyonrails.org/classes/ActiveRecord/QueryMethods.html#method-i-select)
 * using the [`pluck` method (gets an array with selecting one or more columns)](https://api.rubyonrails.org/classes/ActiveRecord/Calculations.html#method-i-pluck)
-  * The same problem will appear with [ActiveRecord's ids method](https://api.rubyonrails.org/classes/ActiveRecord/Calculations.html#method-i-ids).
+  * The same problem will appear with [ActiveRecord's `ids`` method](https://api.rubyonrails.org/classes/ActiveRecord/Calculations.html#method-i-ids).
 * specifying another model through [`includes` (selects columns from other tables)](https://api.rubyonrails.org/classes/ActiveRecord/QueryMethods.html#method-i-includes)
-  * See also the Known Issues [using-near-with-includes](#using-near-with-select) section.
+  * See also Known Issues [using-near-with-includes](#using-near-with-select) section.
 
 If you get an error in the above cases, try the following:
 
