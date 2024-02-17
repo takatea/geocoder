@@ -60,6 +60,20 @@ class NearTest < GeocoderTestCase
     assert_no_consecutive_comma(result[:select])
   end
 
+  def test_near_scope_options_without_select_column
+    result = Place.send(:near_scope_options, 1.0, 2.0, 5, :select => nil)
+
+    assert_match(/#{Place.table_name}.\*/, result[:select])
+  end
+
+  def test_near_scope_options_with_select_column
+    result = Place.send(:near_scope_options, 1.0, 2.0, 5, :select => "selected_column")
+
+    assert_no_match(/#{Place.table_name}.\*/, result[:select])
+    assert_no_match(/#{Place.table_name}.selected_column/, result[:select])
+    assert_match(/selected_column/, result[:select])
+  end
+
   def test_near_scope_options_with_no_distance
     result = PlaceWithCustomResultsHandling.send(:near_scope_options, 1.0, 2.0, 5, :select_distance => false)
 
