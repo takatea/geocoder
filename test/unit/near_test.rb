@@ -66,12 +66,67 @@ class NearTest < GeocoderTestCase
     assert_match(/#{Place.table_name}.\*/, result[:select])
   end
 
-  def test_near_scope_options_with_select_column
+  def test_near_scope_options_with_select_column_using_single_string
     result = Place.send(:near_scope_options, 1.0, 2.0, 5, :select => "selected_column")
 
     assert_no_match(/#{Place.table_name}.\*/, result[:select])
-    assert_no_match(/#{Place.table_name}.selected_column/, result[:select])
-    assert_match(/selected_column/, result[:select])
+    assert_match(/#{Place.table_name}.selected_column/, result[:select])
+  end
+
+  def test_near_scope_options_with_select_column_using_string_splitted_comma
+    result = Place.send(:near_scope_options, 1.0, 2.0, 5, :select => "selected_column1, selected_column2")
+
+    assert_no_match(/#{Place.table_name}.\*/, result[:select])
+    assert_match(/#{Place.table_name}.selected_column1/, result[:select])
+    assert_match(/#{Place.table_name}.selected_column2/, result[:select])
+  end
+
+  def test_near_scope_options_with_select_column_using_symbol
+    result = Place.send(:near_scope_options, 1.0, 2.0, 5, :select => :selected_column)
+
+    assert_no_match(/#{Place.table_name}.\*/, result[:select])
+    assert_match(/#{Place.table_name}.selected_column/, result[:select])
+  end
+
+  def test_near_scope_options_with_select_column_using_string_array
+    result = Place.send(:near_scope_options, 1.0, 2.0, 5, :select => ["selected_column"])
+
+    assert_no_match(/#{Place.table_name}.\*/, result[:select])
+    assert_match(/#{Place.table_name}.selected_column/, result[:select])
+  end
+
+  def test_near_scope_options_with_select_column_using_symbol_array
+    result = Place.send(:near_scope_options, 1.0, 2.0, 5, :select => [:selected_column])
+
+    assert_no_match(/#{Place.table_name}.\*/, result[:select])
+    assert_match(/#{Place.table_name}.selected_column/, result[:select])
+  end
+
+  def test_near_scope_options_with_select_column_using_string_splitted_comma_in_array
+    result = Place.send(:near_scope_options, 1.0, 2.0, 5, :select => ["selected_column1, selected_column2"])
+
+    assert_no_match(/#{Place.table_name}.\*/, result[:select])
+    assert_match(/#{Place.table_name}.selected_column1/, result[:select])
+    assert_no_match(/#{Place.table_name}.selected_column2/, result[:select])
+    assert_match(/selected_column2/, result[:select])
+  end
+
+  def test_near_scope_options_with_select_other_table_column_using_string_splitted_comma
+    result = Place.send(:near_scope_options, 1.0, 2.0, 5, :select => "other_table.id, original_table_column")
+
+    assert_no_match(/#{Place.table_name}.\*/, result[:select])
+    assert_match(/#{Place.table_name}.original_table_column/, result[:select])
+    assert_no_match(/#{Place.table_name}.other_table.id/, result[:select])
+    assert_match(/other_table.id/, result[:select])
+  end
+
+  def test_near_scope_options_with_select_other_table_column_using_array
+    result = Place.send(:near_scope_options, 1.0, 2.0, 5, :select => ["other_table.id", "original_table_column"])
+
+    assert_no_match(/#{Place.table_name}.\*/, result[:select])
+    assert_match(/#{Place.table_name}.original_table_column/, result[:select])
+    assert_no_match(/#{Place.table_name}.other_table.id/, result[:select])
+    assert_match(/other_table.id/, result[:select])
   end
 
   def test_near_scope_options_with_no_distance
