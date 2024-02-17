@@ -67,66 +67,35 @@ class NearTest < GeocoderTestCase
   end
 
   def test_near_scope_options_with_select_column_using_single_string
-    result = Place.send(:near_scope_options, 1.0, 2.0, 5, :select => "selected_column")
-
-    assert_no_match(/#{Place.table_name}.\*/, result[:select])
-    assert_match(/#{Place.table_name}.selected_column/, result[:select])
+    assert_select_option("selected_column", "#{Place.table_name}.selected_column")
   end
 
   def test_near_scope_options_with_select_column_using_string_splitted_comma
-    result = Place.send(:near_scope_options, 1.0, 2.0, 5, :select => "selected_column1, selected_column2")
-
-    assert_no_match(/#{Place.table_name}.\*/, result[:select])
-    assert_match(/#{Place.table_name}.selected_column1/, result[:select])
-    assert_match(/#{Place.table_name}.selected_column2/, result[:select])
+    assert_select_option("selected_column1, selected_column2", "#{Place.table_name}.selected_column1, #{Place.table_name}.selected_column2")
   end
 
   def test_near_scope_options_with_select_column_using_symbol
-    result = Place.send(:near_scope_options, 1.0, 2.0, 5, :select => :selected_column)
-
-    assert_no_match(/#{Place.table_name}.\*/, result[:select])
-    assert_match(/#{Place.table_name}.selected_column/, result[:select])
+    assert_select_option(:selected_column, "#{Place.table_name}.selected_column")
   end
 
   def test_near_scope_options_with_select_column_using_string_array
-    result = Place.send(:near_scope_options, 1.0, 2.0, 5, :select => ["selected_column"])
-
-    assert_no_match(/#{Place.table_name}.\*/, result[:select])
-    assert_match(/#{Place.table_name}.selected_column/, result[:select])
+    assert_select_option(["selected_column"], "#{Place.table_name}.selected_column")
   end
 
   def test_near_scope_options_with_select_column_using_symbol_array
-    result = Place.send(:near_scope_options, 1.0, 2.0, 5, :select => [:selected_column])
-
-    assert_no_match(/#{Place.table_name}.\*/, result[:select])
-    assert_match(/#{Place.table_name}.selected_column/, result[:select])
+    assert_select_option([:selected_column], "#{Place.table_name}.selected_column")
   end
 
   def test_near_scope_options_with_select_column_using_string_splitted_comma_in_array
-    result = Place.send(:near_scope_options, 1.0, 2.0, 5, :select => ["selected_column1, selected_column2"])
-
-    assert_no_match(/#{Place.table_name}.\*/, result[:select])
-    assert_match(/#{Place.table_name}.selected_column1/, result[:select])
-    assert_no_match(/#{Place.table_name}.selected_column2/, result[:select])
-    assert_match(/selected_column2/, result[:select])
+    assert_select_option(["selected_column1, selected_column2"], "#{Place.table_name}.selected_column1, selected_column2")
   end
 
   def test_near_scope_options_with_select_other_table_column_using_string_splitted_comma
-    result = Place.send(:near_scope_options, 1.0, 2.0, 5, :select => "other_table.id, original_table_column")
-
-    assert_no_match(/#{Place.table_name}.\*/, result[:select])
-    assert_match(/#{Place.table_name}.original_table_column/, result[:select])
-    assert_no_match(/#{Place.table_name}.other_table.id/, result[:select])
-    assert_match(/other_table.id/, result[:select])
+    assert_select_option("other_table.id, original_table_column", "other_table.id, #{Place.table_name}.original_table_column")
   end
 
   def test_near_scope_options_with_select_other_table_column_using_array
-    result = Place.send(:near_scope_options, 1.0, 2.0, 5, :select => ["other_table.id", "original_table_column"])
-
-    assert_no_match(/#{Place.table_name}.\*/, result[:select])
-    assert_match(/#{Place.table_name}.original_table_column/, result[:select])
-    assert_no_match(/#{Place.table_name}.other_table.id/, result[:select])
-    assert_match(/other_table.id/, result[:select])
+    assert_select_option(["other_table.id", "original_table_column"], "other_table.id, #{Place.table_name}.original_table_column")
   end
 
   def test_near_scope_options_with_no_distance
@@ -169,6 +138,13 @@ class NearTest < GeocoderTestCase
 
   def assert_no_consecutive_comma(string)
     assert_no_match(/, *,/, string, "two consecutive commas")
+  end
+
+  def assert_select_option(select_value, expected_select)
+    result = Place.send(:near_scope_options, 1.0, 2.0, 5, :select => select_value)
+
+    assert_no_match(/#{Place.table_name}.\*/, result[:select])
+    assert_match(/#{expected_select}/, result[:select])
   end
 
   def using_unextended_sqlite?
