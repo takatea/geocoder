@@ -98,6 +98,10 @@ class NearTest < GeocoderTestCase
     assert_select_option(["other_table.id", "original_table_column"], "other_table.id, #{Place.table_name}.original_table_column")
   end
 
+  def test_near_scope_options_with_select_column_included_space
+    assert_select_option("'column with space'","#{Place.table_name}.'columnwithspace'")
+  end
+
   def test_near_scope_options_with_no_distance
     result = PlaceWithCustomResultsHandling.send(:near_scope_options, 1.0, 2.0, 5, :select_distance => false)
 
