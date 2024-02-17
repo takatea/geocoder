@@ -99,7 +99,7 @@ class NearTest < GeocoderTestCase
   end
 
   def test_near_scope_options_with_select_column_included_space
-    assert_select_option("'column with space'","#{Place.table_name}.'columnwithspace'")
+    assert_select_option("'column with space'","#{Place.table_name}.'column with space'")
   end
 
   def test_near_scope_options_with_no_distance
