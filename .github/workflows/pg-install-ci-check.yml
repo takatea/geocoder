@@ -33,6 +33,8 @@ jobs:
           bundler-cache: true
       - name: pg install
         run: MAKEFLAGS=V=1 gem install --verbose pg -v '~> 0.11'
+      - name: mysql2 install
+        run: MAKEFLAGS=V=1 gem install --verbose mysql2 -v '~> 0.5.4'
       - name: Run tests
         run: bundle exec rake
   test-macos-latest:
@@ -62,5 +64,7 @@ jobs:
           bundler-cache: true
       - name: pg install
         run: MAKEFLAGS=V=1 gem install --verbose pg -v '~> 0.11'
+      - name: mysql2 install
+        run: MAKEFLAGS=V=1 gem install --verbose mysql2 -v '~> 0.5.4'
       - name: Run tests
         run: bundle exec rake
