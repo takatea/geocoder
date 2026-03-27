@@ -1,6 +1,7 @@
 source "https://rubygems.org"
 
 group :development, :test do
+  gem 'benchmark' # needed for Ruby >=4.0
   gem 'bigdecimal'
   gem 'geoip'
   gem 'ip2location_ruby'
@@ -9,6 +10,7 @@ group :development, :test do
   gem 'ostruct'
   gem 'rails', '~>5.1.0'
   gem 'rake'
+  gem 'rdoc' # needed for Ruby >=4.0
   gem 'rubyzip'
   gem 'test-unit' # needed for Ruby >=2.2.0
 
