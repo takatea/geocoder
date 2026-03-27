@@ -1,20 +1,20 @@
 source "https://rubygems.org"
 
 group :development, :test do
-  gem 'rake'
-  gem 'mongoid'
+  gem 'bigdecimal'
   gem 'geoip'
-  gem 'rubyzip'
-  gem 'rails', '~>5.1.0'
-  gem 'test-unit' # needed for Ruby >=2.2.0
   gem 'ip2location_ruby'
   gem 'logger'
+  gem 'mongoid'
   gem 'ostruct'
-  gem 'bigdecimal'
+  gem 'rails', '~>5.1.0'
+  gem 'rake'
+  gem 'rubyzip'
+  gem 'test-unit' # needed for Ruby >=2.2.0
 
   platforms :jruby do
-    gem 'jruby-openssl'
     gem 'jgeoip'
+    gem 'jruby-openssl'
   end
 end
 
@@ -24,18 +24,18 @@ group :test do
     gem 'sqlite_ext'
   end
 
-  gem 'webmock'
   gem 'mutex_m'
+  gem 'webmock'
 
   platforms :ruby do
-    gem 'pg', '~> 1.5.9'
     gem 'mysql2', '~> 0.5.4'
+    gem 'pg', '~> 1.5.9'
   end
 
   platforms :jruby do
+    gem 'activerecord-jdbcpostgresql-adapter'
     gem 'jdbc-mysql'
     gem 'jdbc-sqlite3'
-    gem 'activerecord-jdbcpostgresql-adapter'
   end
 end
 
