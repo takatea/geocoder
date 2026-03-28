@@ -19,6 +19,7 @@ module Geocoder::Lookup
     private # ---------------------------------------------------------------
 
     def base_query_url(query)
+      require 'erb' unless defined?(ERB) && defined?(ERB::Util.url_encode)
       text = ERB::Util.url_encode(query.sanitized_text.strip)
       url = "#{protocol}://dev.virtualearth.net/REST/v1/Locations/"
       if query.reverse_geocode?
